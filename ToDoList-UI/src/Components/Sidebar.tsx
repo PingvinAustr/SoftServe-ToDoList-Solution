@@ -4,7 +4,6 @@ import './CategorySidebarItems'
 import CategorySidebarItems from "./CategorySidebarItems";
 import * as $ from "jquery";
 
-
 function Sidebar() {
 
     return (

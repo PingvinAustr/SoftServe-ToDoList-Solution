@@ -47,3 +47,6 @@
 .single_category_item:hover{
     background: #00b6fb;
 }
+.popupHead{
+    height:100%;
+}
