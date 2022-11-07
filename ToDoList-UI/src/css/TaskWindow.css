@@ -1,0 +1,20 @@
+.task_window_container{
+    width:85%;
+    height:100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.task_window_display{
+    display: block;
+    background: white;
+    width:80%;
+    height:80%;
+}
+.window_hidden{
+    display: none;
+}
+#currentCategoryNameDiv{
+    font-size:36px;
+
+}
