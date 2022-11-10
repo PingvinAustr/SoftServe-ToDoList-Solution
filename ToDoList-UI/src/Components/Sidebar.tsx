@@ -2,13 +2,17 @@ import React from 'react';
 import '../css/Sidebar.css';
 import './CategorySidebarItems'
 import CategorySidebarItems from "./CategorySidebarItems";
+import {OpenSelectedCategory} from "./CategorySidebarItems";
+import currentOpenedCategory from "../js/currentOpenedCategory";
+import { Input } from 'antd';
 import * as $ from "jquery";
 
 function Sidebar() {
 
     return (
         <div className="sidebar_container">
-        <input type="text" id="categoryInput" placeholder="Category name"/>
+
+            <Input type={"text"} id={"categoryInput"} placeholder={"Category name"} maxLength={70} showCount={true}></Input>
             <div className="add_button" onClick={addCategory}>Add</div>
             <CategorySidebarItems/>
 
@@ -37,6 +41,10 @@ function addCategory() {
             console.log(JSON.stringify(response));
         }
     });
+    //CategorySidebarItems();
     document.location.reload();
+
+
+
 }
 

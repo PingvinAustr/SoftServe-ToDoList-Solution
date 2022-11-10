@@ -87,8 +87,15 @@ namespace ToDoList_API.Controllers
         // POST: api/Task_
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
-        public async Task<ActionResult<Task_>> PostTask_(Task_ task_)
+        public async Task<ActionResult<Task_>> PostTask_([FromForm]string taskName, [FromForm] string taskDescription, [FromForm] int taskUrgency, [FromForm] int taskStatus, [FromForm] int taskCategory)
         {
+            Task_ task_ = new Task_();
+            task_.TaskName= taskName;
+            task_.TaskDescription= taskDescription;
+            task_.TaskStatus= taskStatus;
+            task_.TaskUrgency= taskUrgency;
+            task_.TaskCategory= taskCategory;
+
             _context.Tasks.Add(task_);
             await _context.SaveChangesAsync();
 

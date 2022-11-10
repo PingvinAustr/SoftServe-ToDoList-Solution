@@ -1,14 +1,24 @@
-import React from 'react';
+import React, { useState } from 'react';
 import '../css/Sidebar.css';
 import * as $ from 'jquery';
 import ReactDOM from "react-dom/client";
-import { Button, Popconfirm, Space, Upload } from 'antd';
 import { Layout } from 'antd';
 import { Col, Row } from 'antd';
+import FormModal from "./FormModal";
+import currentOpenedCategory from "../js/currentOpenedCategory";
+import {getItemNamePerId} from "../js/functions";
+import { Tooltip } from 'antd';
 const { Header, Footer, Sider, Content } = Layout;
+
+
+
+
 var renderListNames:string[] = [];
 var renderListIds:number[]=[];
 var renderTest:string[]=[];
+var itemListResponse:Item[]=[];
+
+
 
 interface Item {
     taskId: number
@@ -27,10 +37,18 @@ getAllCaregories();
 
 
 function CategorySidebarItems() {
+
+
     const numbers=renderListNames;
     const listItems=numbers.map((number) =>
-    <div key={number.toString()} id={renderListIds[renderListNames.findIndex(x=>x==number)].toString()}  className="single_category_item" onClick={() =>OpenSelectedCategory(renderListIds[renderListNames.findIndex(x=>x==number)])}>{number}</div>
-    );
+
+            <Tooltip title={number} color={"black"} placement={"right"} trigger={"hover"}>
+                <div key={number.toString()} id={renderListIds[renderListNames.findIndex(x=>x==number)].toString()}  className="single_category_item" onClick={() =>OpenSelectedCategory(renderListIds[renderListNames.findIndex(x=>x==number)])}>{number}</div>
+            </Tooltip>
+        );
+    for (let i=0;i<listItems.length;i++){
+         console.log(listItems[i]);
+    }
     return (
         <div>{listItems}</div>
     );
@@ -61,7 +79,7 @@ function getAllCaregories() {
     });
 }
 
-function OpenSelectedCategory(input:number){
+export function OpenSelectedCategory(input:number){
 
     console.log("Opening category with ID:"+input);
  var item = document.getElementById("Layout1");
@@ -70,9 +88,52 @@ function OpenSelectedCategory(input:number){
  getAllTasksFromCurrentCategory(input);
 }
 
-function LoadTasksToSelectedCategory(){
+function LoadTasksToSelectedCategory(id:number){
+    getItemNamePerId("status",1);
+    const listItems=itemListResponse.map((item:Item)=>
+            <Row style={{fontSize: "16px",marginLeft:"1px"}}>
+                <Col className={"grid_col_item"} span={5}>{item.taskName}</Col>
+                <Col className={"grid_col_item"} span={6}>{item.taskDescription}</Col>
+                <Col className={"grid_col_item"} span={5}>{getItemNamePerId("urgency", item.taskUrgency)}</Col>
+                <Col className={"grid_col_item"} span={5}>{getItemNamePerId("status",item.taskStatus)}</Col>
+                <Col className={"grid_col_item"} span={3}>Task Buttons:</Col>
+            </Row>
 
+    );
+
+    // СПРОСИТЬ
+    const root = ReactDOM.createRoot(
+        document.getElementById('Content1') as HTMLElement
+    );
+
+
+
+
+    root.render(
+        <div className={"popupHead"}>
+            <Row style={{fontSize:"24px"}}>
+                <Col span={21}>
+                    <div id="currentCategoryNameDiv">{renderListNames[renderListIds.findIndex(x=>x==id)!]!}</div>
+                </Col>
+                <Col span={3}>
+                    <FormModal/>
+                </Col>
+            </Row>
+            <div style={{height:"65vh",overflowY:"auto"}}>
+            <Row  style={{fontSize:"20px", marginLeft:"1px"}} >
+                <Col className={"grid_col_item"} span={5}>Task Name:</Col>
+                <Col className={"grid_col_item"} span={6}>Task Description:</Col>
+                <Col className={"grid_col_item"} span={5}>Task Urgency:</Col>
+                <Col className={"grid_col_item"} span={5}>Task Status:</Col>
+                <Col className={"grid_col_item"} span={3}>Actions:</Col>
+            </Row>
+            <div>{listItems}</div>
+            </div>
+        </div>
+
+    );
 }
+
 function getAllTasksFromCurrentCategory(id:number){
 
     $.ajax({
@@ -87,36 +148,14 @@ function getAllTasksFromCurrentCategory(id:number){
         success: function (response) {
             console.log("Recieved all tasks from ["+id+"] category");
             console.log(JSON.stringify(response));
-            var itemListResponse:Item[]=[];
+
             itemListResponse=response;
-            const listItems=itemListResponse.map((item:Item)=>
-            <Row>{item.taskName}</Row>
-            );
-
-            // СПРОСИТЬ
-            const root = ReactDOM.createRoot(
-                document.getElementById('Content1') as HTMLElement
-            );
-
-
-            root.render(
-                <div className={"popupHead"}>
-                    <Row style={{fontSize:"24px"}}>
-                        <Col span={21}>
-                            <div id="currentCategoryNameDiv">{renderListNames[renderListIds.findIndex(x=>x==id)!]!}</div>
-                        </Col>
-                        <Col span={3}>
-                            <Button size={"large"} type="primary">Add task</Button>
-                        </Col>
-                    </Row>
-                <div>{listItems}</div>
-                </div>
-
-            );
-
+            LoadTasksToSelectedCategory(id);
+            currentOpenedCategory.category_id=id;
         },
         error: function (response, status, error) {
             console.log(JSON.stringify(response));
         }
     });
 }
+

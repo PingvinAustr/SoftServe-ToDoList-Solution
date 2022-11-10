@@ -26,6 +26,7 @@ namespace ToDoList_API.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Category>>> GetCategories()
         {
+            
             return await _context.Categories.ToListAsync();
         }
 
