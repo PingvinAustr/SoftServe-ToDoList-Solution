@@ -12,7 +12,11 @@ builder.Services.AddCors(options =>
                       policy =>
                       {
                           policy.WithOrigins("http://localhost:3000",
-                                              "http://www.contoso.com");
+                                              "http://www.contoso.com")
+
+                          .AllowAnyHeader()
+                          .AllowAnyOrigin()
+                          .WithMethods("PUT", "DELETE", "GET", "POST");
                       });
 });
 

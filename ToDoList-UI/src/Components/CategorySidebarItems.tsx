@@ -6,8 +6,11 @@ import { Layout } from 'antd';
 import { Col, Row } from 'antd';
 import FormModal from "./FormModal";
 import currentOpenedCategory from "../js/currentOpenedCategory";
-import {getItemNamePerId} from "../js/functions";
+import {getItemNamePerId, deleteTaskPerId, deleteCategoryPerId} from "../js/functions";
 import { Tooltip } from 'antd';
+import {Typography, Space} from "antd";
+import ConfirmationModal from "./ConfirmationModal";
+const { Paragraph } = Typography;
 const { Header, Footer, Sider, Content } = Layout;
 
 
@@ -41,10 +44,12 @@ function CategorySidebarItems() {
 
     const numbers=renderListNames;
     const listItems=numbers.map((number) =>
-
-            <Tooltip title={number} color={"black"} placement={"right"} trigger={"hover"}>
-                <div key={number.toString()} id={renderListIds[renderListNames.findIndex(x=>x==number)].toString()}  className="single_category_item" onClick={() =>OpenSelectedCategory(renderListIds[renderListNames.findIndex(x=>x==number)])}>{number}</div>
-            </Tooltip>
+                <div key={number.toString()} id={renderListIds[renderListNames.findIndex(x=>x==number)].toString()}  className="single_category_item" >
+                    <div onClick={() =>OpenSelectedCategory(renderListIds[renderListNames.findIndex(x=>x==number)])} style={{width:"80%", lineHeight:"1.1"}}>{number}</div>
+                    <div style={{width:"10%"}}>
+                    <ConfirmationModal modalTitle={"Delete the category"} modalContent={"Do you really want to delete this category?"} modalOkText={"Yes"} modalCancelText={"No"} doSomething={()=>deleteCategoryPerId(renderListIds[renderListNames.findIndex(x=>x==number)])}/>
+                    </div>
+                </div>
         );
     for (let i=0;i<listItems.length;i++){
          console.log(listItems[i]);
@@ -91,12 +96,14 @@ export function OpenSelectedCategory(input:number){
 function LoadTasksToSelectedCategory(id:number){
     getItemNamePerId("status",1);
     const listItems=itemListResponse.map((item:Item)=>
-            <Row style={{fontSize: "16px",marginLeft:"1px"}}>
+            <Row style={{fontSize: "16px",marginLeft:"1px", minHeight:"50px"}}>
                 <Col className={"grid_col_item"} span={5}>{item.taskName}</Col>
                 <Col className={"grid_col_item"} span={6}>{item.taskDescription}</Col>
                 <Col className={"grid_col_item"} span={5}>{getItemNamePerId("urgency", item.taskUrgency)}</Col>
                 <Col className={"grid_col_item"} span={5}>{getItemNamePerId("status",item.taskStatus)}</Col>
-                <Col className={"grid_col_item"} span={3}>Task Buttons:</Col>
+                <Col className={"grid_col_item"} span={3}>
+                    <ConfirmationModal modalTitle={"Delete"} modalContent={"Do you really want to delete this task?"} modalOkText={"Yes"} modalCancelText={"NO"} doSomething={()=>{deleteTaskPerId(item.taskId); OpenSelectedCategory(currentOpenedCategory.category_id); }} />
+                </Col>
             </Row>
 
     );
@@ -112,15 +119,15 @@ function LoadTasksToSelectedCategory(id:number){
     root.render(
         <div className={"popupHead"}>
             <Row style={{fontSize:"24px"}}>
-                <Col span={21}>
-                    <div id="currentCategoryNameDiv">{renderListNames[renderListIds.findIndex(x=>x==id)!]!}</div>
+                <Col span={15}>
+                    <div id="currentCategoryNameDiv" style={{wordBreak:"break-all", lineHeight:"1"}}>{renderListNames[renderListIds.findIndex(x=>x==id)!]!}</div>
                 </Col>
-                <Col span={3}>
+                <Col span={3} offset={6}>
                     <FormModal/>
                 </Col>
             </Row>
-            <div style={{height:"65vh",overflowY:"auto"}}>
-            <Row  style={{fontSize:"20px", marginLeft:"1px"}} >
+            <div id={"tableRender"} style={{height:"65vh",overflowY:"auto", marginTop:"10px"}}>
+            <Row id={"tableHeaderRow"} style={{fontSize:"20px", marginLeft:"1px", minHeight:"50px"}} >
                 <Col className={"grid_col_item"} span={5}>Task Name:</Col>
                 <Col className={"grid_col_item"} span={6}>Task Description:</Col>
                 <Col className={"grid_col_item"} span={5}>Task Urgency:</Col>

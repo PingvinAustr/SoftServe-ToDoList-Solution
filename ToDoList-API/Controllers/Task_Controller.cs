@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -10,6 +11,7 @@ using ToDoList_DAL;
 
 namespace ToDoList_API.Controllers
 {
+    [EnableCors("_myAllowSpecificOrigins")]
     [Route("api/[controller]")]
     [ApiController]
     public class Task_Controller : ControllerBase
@@ -104,7 +106,7 @@ namespace ToDoList_API.Controllers
 
         // DELETE: api/Task_/5
         [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteTask_(int id)
+        public async Task<IActionResult> DeleteTask_([FromForm] int id)
         {
             var task_ = await _context.Tasks.FindAsync(id);
             if (task_ == null)
@@ -117,6 +119,14 @@ namespace ToDoList_API.Controllers
 
             return NoContent();
         }
+        
+        /*
+        [HttpDelete("id")]
+        public void DeleteTask_([FromForm] int id)
+        {
+            Console.WriteLine("delete["+id+"]");
+        }
+        */
 
         private bool Task_Exists(int id)
         {
