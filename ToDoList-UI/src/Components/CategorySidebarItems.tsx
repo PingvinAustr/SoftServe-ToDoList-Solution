@@ -2,14 +2,16 @@ import React, { useState } from 'react';
 import '../css/Sidebar.css';
 import * as $ from 'jquery';
 import ReactDOM from "react-dom/client";
-import { Layout } from 'antd';
-import { Col, Row } from 'antd';
+import {Button, Layout, Col, Row, Typography, Space } from 'antd';
 import FormModal from "./FormModal";
+import EditModal, {EditTask, EditCategory} from "./EditModal";
 import currentOpenedCategory from "../js/currentOpenedCategory";
 import {getItemNamePerId, deleteTaskPerId, deleteCategoryPerId} from "../js/functions";
-import { Tooltip } from 'antd';
-import {Typography, Space} from "antd";
 import ConfirmationModal from "./ConfirmationModal";
+import {AddTask} from "./FormModal";
+import TasksTable from "./TasksTable";
+import {EditOutlined} from '@ant-design/icons';
+
 const { Paragraph } = Typography;
 const { Header, Footer, Sider, Content } = Layout;
 
@@ -37,20 +39,32 @@ interface Item {
 }
 
 getAllCaregories();
+interface Category{
+    categoryId:number,
+    categoryName:string,
+    doSomething: Function
+}
+interface CategoryList{
+    categories: Category[];
+}
+interface FunctionProp{
+    action: (params: any) => any;
+}
+var categoryList:Category[]=[];
+/*
+function CategorySidebarItems({categories}:CategoryList, action:FunctionProp ) {
+    console.log(categories);
+    const numbers=renderListNames
+    const listItems=categories.map((item)=>
+        <div key={item.toString()} id={item.categoryId.toString()}  className="single_category_item" >
+            <div onClick={() =>OpenSelectedCategory(item.categoryId)} style={{width:"75%", lineHeight:"1.1"}}>{item.categoryName}</div>
+            <div style={{width:"15%", display:"flex"}}>
+                <ConfirmationModal modalTitle={"Delete the category"} modalContent={"Do you really want to delete this category?"} modalOkText={"Yes"} modalCancelText={"No"} doSomething={()=>deleteCategoryPerId(item.categoryId)}  />
+                <EditModal type={"categoryEdit"} doSomething={()=>EditCategory(item.categoryId)}/>
+            </div>
+        </div>
+    );
 
-
-function CategorySidebarItems() {
-
-
-    const numbers=renderListNames;
-    const listItems=numbers.map((number) =>
-                <div key={number.toString()} id={renderListIds[renderListNames.findIndex(x=>x==number)].toString()}  className="single_category_item" >
-                    <div onClick={() =>OpenSelectedCategory(renderListIds[renderListNames.findIndex(x=>x==number)])} style={{width:"80%", lineHeight:"1.1"}}>{number}</div>
-                    <div style={{width:"10%"}}>
-                    <ConfirmationModal modalTitle={"Delete the category"} modalContent={"Do you really want to delete this category?"} modalOkText={"Yes"} modalCancelText={"No"} doSomething={()=>deleteCategoryPerId(renderListIds[renderListNames.findIndex(x=>x==number)])}/>
-                    </div>
-                </div>
-        );
     for (let i=0;i<listItems.length;i++){
          console.log(listItems[i]);
     }
@@ -61,6 +75,8 @@ function CategorySidebarItems() {
 
 
 export default CategorySidebarItems;
+*/
+
 
 // ============================ AJAX ===================================
 function getAllCaregories() {
@@ -84,25 +100,35 @@ function getAllCaregories() {
     });
 }
 
+/*
 export function OpenSelectedCategory(input:number){
 
     console.log("Opening category with ID:"+input);
- var item = document.getElementById("Layout1");
- if (item != null) item.hidden=false;
+    currentOpenedCategory.category_id=input;
+    console.log("current opened category="+currentOpenedCategory.category_id);
+    const root = ReactDOM.createRoot(document.getElementById('Content1') as HTMLElement);
+       root.render(<TasksTable categoryId={input}/>)
 
- getAllTasksFromCurrentCategory(input);
+ //var item = document.getElementById("Layout1");
+ //if (item != null) item.hidden=false;
+
+ //getAllTasksFromCurrentCategory(input);
 }
-
+*/
+/*
 function LoadTasksToSelectedCategory(id:number){
     getItemNamePerId("status",1);
     const listItems=itemListResponse.map((item:Item)=>
-            <Row style={{fontSize: "16px",marginLeft:"1px", minHeight:"50px"}}>
+            <Row style={{marginLeft:"1px", minHeight:"50px"}}>
                 <Col className={"grid_col_item"} span={5}>{item.taskName}</Col>
                 <Col className={"grid_col_item"} span={6}>{item.taskDescription}</Col>
                 <Col className={"grid_col_item"} span={5}>{getItemNamePerId("urgency", item.taskUrgency)}</Col>
                 <Col className={"grid_col_item"} span={5}>{getItemNamePerId("status",item.taskStatus)}</Col>
                 <Col className={"grid_col_item"} span={3}>
+                    <Space>
                     <ConfirmationModal modalTitle={"Delete"} modalContent={"Do you really want to delete this task?"} modalOkText={"Yes"} modalCancelText={"NO"} doSomething={()=>{deleteTaskPerId(item.taskId); OpenSelectedCategory(currentOpenedCategory.category_id); }} />
+                    <EditModal type={"taskEdit"} doSomething={()=>{EditTask(item.taskId); OpenSelectedCategory(currentOpenedCategory.category_id);}}/>
+                    </Space>
                 </Col>
             </Row>
 
@@ -123,11 +149,11 @@ function LoadTasksToSelectedCategory(id:number){
                     <div id="currentCategoryNameDiv" style={{wordBreak:"break-all", lineHeight:"1"}}>{renderListNames[renderListIds.findIndex(x=>x==id)!]!}</div>
                 </Col>
                 <Col span={3} offset={6}>
-                    <FormModal/>
+                    <FormModal doSomething={()=>AddTask()}/>
                 </Col>
             </Row>
             <div id={"tableRender"} style={{height:"65vh",overflowY:"auto", marginTop:"10px"}}>
-            <Row id={"tableHeaderRow"} style={{fontSize:"20px", marginLeft:"1px", minHeight:"50px"}} >
+            <Row id={"tableHeaderRow"} style={{marginLeft:"1px", minHeight:"50px"}} >
                 <Col className={"grid_col_item"} span={5}>Task Name:</Col>
                 <Col className={"grid_col_item"} span={6}>Task Description:</Col>
                 <Col className={"grid_col_item"} span={5}>Task Urgency:</Col>
@@ -166,3 +192,4 @@ function getAllTasksFromCurrentCategory(id:number){
     });
 }
 
+*/

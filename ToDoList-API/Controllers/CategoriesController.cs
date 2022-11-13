@@ -46,18 +46,15 @@ namespace ToDoList_API.Controllers
 
         // PUT: api/Categories/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        [HttpPut("{id}")]
-        public async Task<IActionResult> PutCategory(int id, Category category)
+        [HttpPut]
+        public async Task<IActionResult> PutCategory(int id, [FromForm]string categoryName)
         {
-            if (id != category.CategoryId)
-            {
-                return BadRequest();
-            }
-
-            _context.Entry(category).State = EntityState.Modified;
 
             try
             {
+                Category category = _context.Categories.Where(x=>x.CategoryId == id).FirstOrDefault();
+                category.CategoryName = categoryName;
+                _context.Categories.Select(x => x.CategoryId == id ? category : category).ToList();
                 await _context.SaveChangesAsync();
             }
             catch (DbUpdateConcurrencyException)
@@ -71,7 +68,6 @@ namespace ToDoList_API.Controllers
                     throw;
                 }
             }
-
             return NoContent();
         }
 

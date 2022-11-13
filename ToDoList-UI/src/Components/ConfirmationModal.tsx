@@ -1,5 +1,5 @@
 import { ExclamationCircleOutlined } from '@ant-design/icons';
-import { DeleteOutlined } from '@ant-design/icons';
+import { DeleteOutlined, EditOutlined} from '@ant-design/icons';
 import { Button, Modal, Space } from 'antd';
 import React, { useState } from 'react';
 

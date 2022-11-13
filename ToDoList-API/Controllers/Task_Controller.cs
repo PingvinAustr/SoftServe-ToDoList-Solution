@@ -27,7 +27,6 @@ namespace ToDoList_API.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Task_>>> GetTasks()
         {
-            Console.WriteLine("1");
             return await _context.Tasks.ToListAsync();
         }
 
@@ -35,10 +34,9 @@ namespace ToDoList_API.Controllers
         [HttpGet("{category_id:int}")]
         public ActionResult<IEnumerable<Task_>> GetTasksPerCategory(int category_id)
         {
-            Console.WriteLine("2");
             List<Task_> tasks = new List<Task_>();
-            tasks=_context.Tasks.Where(task=>task.TaskCategory==category_id).ToList();
-            return  tasks;
+            tasks = _context.Tasks.Where(task => task.TaskCategory == category_id).ToList();
+            return tasks;
         }
 
         // GET: api/Task_/5
@@ -57,18 +55,20 @@ namespace ToDoList_API.Controllers
 
         // PUT: api/Task_/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        [HttpPut("{id}")]
-        public async Task<IActionResult> PutTask_(int id, Task_ task_)
-        {
-            if (id != task_.TaskId)
-            {
-                return BadRequest();
-            }
 
-            _context.Entry(task_).State = EntityState.Modified;
+        // public async Task<IActionResult> PutTask_(int id, string taskName, string taskDescription, int taskUrgency, int taskStatus)
+        [HttpPut]
+        public async Task<IActionResult> PutTask_(int id, [FromForm] string taskName, [FromForm] string taskDescription, [FromForm] int taskUrgency, [FromForm] int taskStatus)
+        {
 
             try
             {
+                Task_ item = _context.Tasks.Where(x => x.TaskId == id).FirstOrDefault();
+                item.TaskName = taskName;
+                item.TaskDescription = taskDescription;
+                item.TaskStatus = taskStatus;
+                item.TaskUrgency = taskUrgency;
+                _context.Tasks.Select(x => x.TaskId == id ? item : item).ToList();
                 await _context.SaveChangesAsync();
             }
             catch (DbUpdateConcurrencyException)
@@ -82,7 +82,7 @@ namespace ToDoList_API.Controllers
                     throw;
                 }
             }
-
+            
             return NoContent();
         }
 

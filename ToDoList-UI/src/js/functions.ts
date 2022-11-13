@@ -1,5 +1,4 @@
 import * as $ from "jquery";
-import {OpenSelectedCategory} from "../Components/CategorySidebarItems";
 import currentOpenedCategory from "./currentOpenedCategory";
 var urgencyListResponse:Urgency[]=[];
 var statusListResponse:Status[]=[];
@@ -130,7 +129,7 @@ export function deleteCategoryPerId(categoryId:number){
             console.log(JSON.stringify(response));
         }
     });
-    document.location.reload();
+    //document.location.reload();
 
 }
 
@@ -171,4 +170,31 @@ function getAllTasksFromCurrentCategory(id:number){
             console.log(JSON.stringify(response));
         }
     });
+}
+
+export function getCategoryNamePerId(id:number):string{
+    let categoryName:string="";
+    $.ajax({
+        method: 'GET',
+        url: 'https://localhost:7025/api/Categories',
+        // data: null
+        async: false,
+        contentType: "application/x-www-form-urlencoded",
+        dataType: "json",
+        success: function (response) {
+            //console.log(JSON.stringify(response));
+            for (let i:number=0;i<response.length;i++){
+                if (response[i]["categoryId"]==id) {
+                    categoryName=response[i]["categoryName"];
+                    break;
+                }
+            }
+
+            //console.log(categoryList);
+        },
+        error: function (response, status, error) {
+            console.log(JSON.stringify(response));
+        }
+    });
+    return categoryName;
 }

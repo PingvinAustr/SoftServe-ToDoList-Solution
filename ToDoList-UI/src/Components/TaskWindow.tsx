@@ -1,43 +1,47 @@
 import React from 'react';
 import '../css/TaskWindow.css';
-import * as $ from "jquery";
-
-import { Button, Popconfirm, Space, Upload } from 'antd';
+import Sidebar from "./Sidebar";
 import { Layout } from 'antd';
-import { Col, Row } from 'antd';
+import {NotificationOutlined} from "@ant-design/icons";
+import TasksTable from "./TasksTable";
 const { Header, Footer, Sider, Content } = Layout;
 
 
+
 function TaskWindow() {
-/*
-    return (
-        <Layout id="Layout1" hidden={true} style={{background:"#282c34"}}>
-            <Content id="Content1" style={{margin:"7% 10% 7% 10%", background:"#f0f2f5", padding:"20px"}}>
-                <Row style={{fontSize:"24px"}}>
-                    <Col span={21}>
-                        <div id="currentCategoryNameDiv">placeholder</div>
-                    </Col>
-                    <Col span={3}>
-                        <Button size={"large"} type="primary">Add task</Button>
-                    </Col>
-                </Row>
-            </Content>
-            <Footer style={{textAlign:"center"}}>Created by Chushenko Yaroslav, SoftServe, 2022</Footer>
-        </Layout>
-    );
-    */
 
     return (
-        <Layout id="Layout1" hidden={true} style={{background:"#282c34"}}>
-
-            <Content id="Content1" style={{margin:"7% 10% 7% 10%", background:"#f0f2f5", padding:"20px"}}>
-
-            </Content>
-            <Footer style={{textAlign:"center"}}>Created by Chushenko Yaroslav, SoftServe, 2022</Footer>
+        <Layout style={{height:"100%"}}>
+            <Sider id={"Sider1"} width={"250px"} collapsible={true} breakpoint={"md"} collapsedWidth={0} onCollapse={()=>Hi()}>
+                <Sidebar/>
+            </Sider>
+            <Layout id="Layout1" hidden={true} style={{background: "#282c34"}}>
+                <Content id="Content1" style={{margin:"7% 10% 7% 10%", background:"#f0f2f5", padding:"20px"}}>
+                <TasksTable categoryId={1}/>
+                </Content>
+                <Footer style={{textAlign:"center"}}>
+                    Created by Chushenko Yaroslav, SoftServe, 2022
+                </Footer>
+            </Layout>
         </Layout>
     );
+
 
 }
 
 export default TaskWindow;
 
+function Hi(){
+    if (Math.max(window.innerWidth)<768){
+
+
+        if (document.getElementById("Sider1")!.style.width != "250px") {
+            //Sider is opened
+            document.getElementById("Layout1")!.style.display = "none";
+        } else {
+            document.getElementById("Layout1")!.style.display = "flex";
+        }
+    }
+
+    //alert(Math.max(window. innerWidth));
+}

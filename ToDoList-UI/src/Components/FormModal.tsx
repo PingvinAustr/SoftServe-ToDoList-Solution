@@ -1,8 +1,9 @@
 import { Button, Form, Input, Modal, Select } from 'antd';
 import React, { useState } from 'react';
+import { DeleteOutlined, EditOutlined, AppstoreAddOutlined } from '@ant-design/icons';
 import * as $ from "jquery";
 import currentOpenedCategory from "../js/currentOpenedCategory";
-import {OpenSelectedCategory} from "./CategorySidebarItems";
+import {OpenSelectedCategory} from "./Sidebar";
 
 const { Option } = Select;
 // ============= RESPONSE ARRAYS =========
@@ -18,6 +19,12 @@ interface Status{
     statusId: number
     statusName: string
     tasks:[object];
+}
+interface taskValue{
+    taskName: string,
+    taskDescription:string,
+    taskStatus:number,
+    taskUrgency:number
 }
 
 
@@ -137,25 +144,36 @@ const CollectionCreateForm: React.FC<CollectionCreateFormProps> = ({
     );
 };
 
-const FormModal: React.FC = () => {
+
+
+
+interface FormModalProps{
+    childComp?: React.ReactNode;
+    doSomething: () => any;
+}
+
+//var valuesList:taskValue[]=[];
+var valuesList:any;
+const FormModal: React.FC<FormModalProps> = (props:FormModalProps) => {
     const [open, setOpen] = useState(false);
 
     const onCreate = (values: any) => {
         console.log('Received values of form: ', values);
-        AddTask(values);
+        // AddTask(values);
+        //this!.props!.doSomething(values);
+        valuesList=values;
+        let instance: any | null = props.doSomething();
         setOpen(false);
     };
 
     return (
         <div>
-            <Button
-                type="primary"
-                onClick={() => {
-                    setOpen(true);
-                }}
-            >
-                Add task
-            </Button>
+            <AppstoreAddOutlined onClick={() => {
+                setOpen(true);
+            }}>
+
+            </AppstoreAddOutlined>
+
             <CollectionCreateForm
                 open={open}
                 onCreate={onCreate}
@@ -206,16 +224,16 @@ function getAllStatuses() {
     });
 }
 
-function AddTask(values:any){
+export function AddTask(){
     $.ajax({
         method: 'POST',
         url: 'https://localhost:7025/api/Task_',
         async: false,
         data:{
-          taskName:values["taskName"],
-          taskDescription:values["taskDescription"],
-            taskUrgency:values["taskUrgency"],
-            taskStatus:values["taskStatus"],
+          taskName:valuesList["taskName"],
+          taskDescription:valuesList["taskDescription"],
+            taskUrgency:valuesList["taskUrgency"],
+            taskStatus:valuesList["taskStatus"],
             taskCategory:currentOpenedCategory.category_id
         },
         contentType: "application/x-www-form-urlencoded",
@@ -224,8 +242,13 @@ function AddTask(values:any){
             console.log("success");
         },
         error: function (response, status, error) {
+            console.log("fail");
             console.log(JSON.stringify(response));
         }
     });
     OpenSelectedCategory(currentOpenedCategory.category_id);
+}
+
+export function EditTask(){
+
 }
