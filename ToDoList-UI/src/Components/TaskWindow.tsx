@@ -12,7 +12,7 @@ function TaskWindow() {
 
     return (
         <Layout style={{height:"100%"}}>
-            <Sider id={"Sider1"} width={"250px"} collapsible={true} breakpoint={"md"} collapsedWidth={0} onCollapse={()=>Hi()}>
+            <Sider id={"Sider1"} width={"250px"} collapsible={true} breakpoint={"md"} collapsedWidth={0} onCollapse={()=>sidebarSizeChanger()}>
                 <Sidebar/>
             </Sider>
             <Layout id="Layout1" hidden={true} style={{background: "#282c34"}}>
@@ -31,7 +31,7 @@ function TaskWindow() {
 
 export default TaskWindow;
 
-function Hi(){
+function sidebarSizeChanger(){
     if (Math.max(window.innerWidth)<768){
 
 
