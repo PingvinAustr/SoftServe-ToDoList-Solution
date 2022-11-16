@@ -1,5 +1,6 @@
 import React from 'react';
 import '../css/Sidebar.css';
+import './CategorySidebarItems'
 import currentOpenedCategory from "../js/currentOpenedCategory";
 import { Input } from 'antd';
 import * as $ from "jquery";
@@ -121,6 +122,7 @@ function addCategory() {
         }
     });
     //CategorySidebarItems();
+    //document.location.reload();
 
 
 

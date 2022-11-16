@@ -204,6 +204,8 @@ const EditModal: React.FC<FormModalProps> = (props:FormModalProps) => {
 
     const onCreate = (values: any) => {
         console.log('Received values of form: ', values);
+        // AddTask(values);
+        //this!.props!.doSomething(values);
         valuesList=values;
         let instance: any | null = props.doSomething(1);
         setOpen(false);
