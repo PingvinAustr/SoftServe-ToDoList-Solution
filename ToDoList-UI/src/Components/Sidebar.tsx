@@ -39,6 +39,7 @@ function Sidebar() {
 
     function onAdd(){
         addCategory();
+        //(document.getElementById("categoryInput") as HTMLInputElement).="";
         getAllCaregories();
         setCategories(categoryList);
     }
@@ -46,7 +47,7 @@ function Sidebar() {
         <div key={item.toString()} id={item.categoryId.toString()}  className="single_category_item" >
             <div id={item.categoryId.toString()} onClick={() => OpenSelectedCategory(item.categoryId)} style={{width:"75%", lineHeight:"1.1"}}>{item.categoryName}</div>
             <div style={{width:"15%", display:"flex"}}>
-                <ConfirmationModal modalTitle={"Delete the category"} modalContent={"Do you really want to delete this category?"} modalOkText={"Yes"} modalCancelText={"No"} doSomething={()=>deleteCategoryPerId(item.categoryId)} />
+                <ConfirmationModal modalTitle={"Delete the category"} modalContent={"Do you really want to delete this category?"} modalOkText={"Yes"} modalCancelText={"No"} doSomething={()=>{deleteCategoryPerId(item.categoryId); getAllCaregories(); setCategories(categoryList)}} />
                 <EditModal type={"categoryEdit"} doSomething={()=>{EditCategory(item.categoryId);getAllCaregories();setCategories(categoryList)}}/>
             </div>
         </div>

@@ -1,6 +1,8 @@
 using ToDoList_API;
+
 using System.Web.Http;
 using Microsoft.EntityFrameworkCore;
+
 var MyAllowSpecificOrigins = "_myAllowSpecificOrigins";
 var builder = WebApplication.CreateBuilder(args);
 
@@ -22,11 +24,13 @@ builder.Services.AddCors(options =>
 
 
 builder.Services.AddControllers();
+builder.Services.AddControllersWithViews().AddNewtonsoftJson(options => options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore);
+ 
 
-builder.Services.AddDbContext<todolistContext>(option => option.UseSqlServer(
+builder.Services.AddDbContext<ToDoList_DAL.todolistContext>(option => option.UseSqlServer(
     builder.Configuration.GetConnectionString("DefaultConnection")
     ));
-todolistContext context = new todolistContext();
+ToDoList_DAL.todolistContext context = new ToDoList_DAL.todolistContext();
 Console.WriteLine(context.Urgencies.Count());
 var app = builder.Build();
 

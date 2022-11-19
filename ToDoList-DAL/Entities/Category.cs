@@ -15,5 +15,6 @@ namespace ToDoList_DAL
         public string? CategoryName { get; set; }
 
         public virtual ICollection<Task_> Tasks { get; set; }
+
     }
 }

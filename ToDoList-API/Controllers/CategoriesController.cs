@@ -7,6 +7,8 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using ToDoList_API;
 using ToDoList_DAL;
+using ToDoList_BLL;
+using ToDoList_BLL.Models;
 
 namespace ToDoList_API.Controllers
 {
@@ -15,101 +17,57 @@ namespace ToDoList_API.Controllers
 
     public class CategoriesController : ControllerBase
     {
-        private readonly todolistContext _context;
+        private ToDoList_BLL.CategoryBLL _BLL;
 
-        public CategoriesController(todolistContext context)
+        public CategoriesController()
         {
-            _context = context;
+            _BLL = new ToDoList_BLL.CategoryBLL();
         }
 
         // GET: api/Categories
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Category>>> GetCategories()
+        public async Task<ActionResult<List<CategoryModel>>> GetCategories()
         {
-            
-            return await _context.Categories.ToListAsync();
+            return _BLL.GetCategories();
         }
 
+        
+
+        
         // GET: api/Categories/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<Category>> GetCategory(int id)
+        public async Task<ActionResult<CategoryModel>> GetCategory(int id)
         {
-            var category = await _context.Categories.FindAsync(id);
-
+            var category = _BLL.GetCategory(id);
             if (category == null)
             {
                 return NotFound();
             }
-
-            return category;
+            return Ok(category);
         }
 
-        // PUT: api/Categories/5
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        [HttpPut]
-        public async Task<IActionResult> PutCategory(int id, [FromForm]string categoryName)
-        {
 
-            try
-            {
-                Category category = _context.Categories.Where(x=>x.CategoryId == id).FirstOrDefault();
-                category.CategoryName = categoryName;
-                _context.Categories.Select(x => x.CategoryId == id ? category : category).ToList();
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!CategoryExists(id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
-            }
-            return NoContent();
+        // PUT: api/Categories/5
+        [HttpPut]
+        public void PutCategory(int id, [FromForm]string categoryName)
+        {
+            _BLL.PutCategory(id, categoryName);
         }
 
         // POST: api/Categories
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
         public void PostCategory([FromForm] string categoryName)
         {
-            try
-            {
-                Category category = new Category();
-                category.CategoryName = categoryName;
-                _context.Categories.Add(category);
-                _context.SaveChanges();
-                Console.WriteLine("[" + DateTime.Now + "] New category '" + categoryName + "' was created");
-          
-            }
-            catch
-            {
-                Console.WriteLine("[" + DateTime.Now + "] Error. New category '" + categoryName + "' was NOT created");
-            }
+            _BLL.PostCategory(categoryName);
         }
+
 
         // DELETE: api/Categories/5
         [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteCategory(int id)
+        public void DeleteCategory(int id)
         {
-            var category = await _context.Categories.FindAsync(id);
-            if (category == null)
-            {
-                return NotFound();
-            }
-
-            _context.Categories.Remove(category);
-            await _context.SaveChangesAsync();
-
-            return NoContent();
+            _BLL.DeleteCategory(id);
         }
-
-        private bool CategoryExists(int id)
-        {
-            return _context.Categories.Any(e => e.CategoryId == id);
-        }
+        
     }
 }

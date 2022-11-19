@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
 using ToDoList_DAL;
 
-namespace ToDoList_API
+namespace ToDoList_DAL
 {
     public partial class todolistContext : DbContext
     {

@@ -7,7 +7,9 @@ Project("{54A90642-561A-4BB1-A94E-469ADEE60C69}") = "ToDoList-UI", "ToDoList-UI\
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ToDoList-API", "ToDoList-API\ToDoList-API.csproj", "{D8192A7E-F8D3-406E-AF36-CB66526C8296}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ToDoList-DAL", "ToDoList-DAL\ToDoList-DAL.csproj", "{5D9930D8-DC0B-4D83-9597-F6B2806F17B5}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ToDoList-DAL", "ToDoList-DAL\ToDoList-DAL.csproj", "{5D9930D8-DC0B-4D83-9597-F6B2806F17B5}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ToDoList_BLL", "ToDoList_BLL\ToDoList_BLL.csproj", "{C5F4E327-8FB9-43C4-8293-A8E25F86638C}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -29,6 +31,10 @@ Global
 		{5D9930D8-DC0B-4D83-9597-F6B2806F17B5}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{5D9930D8-DC0B-4D83-9597-F6B2806F17B5}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{5D9930D8-DC0B-4D83-9597-F6B2806F17B5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C5F4E327-8FB9-43C4-8293-A8E25F86638C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C5F4E327-8FB9-43C4-8293-A8E25F86638C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C5F4E327-8FB9-43C4-8293-A8E25F86638C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C5F4E327-8FB9-43C4-8293-A8E25F86638C}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

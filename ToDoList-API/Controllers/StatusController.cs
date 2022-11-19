@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using ToDoList_API;
+using ToDoList_BLL.Models;
 using ToDoList_DAL;
 
 namespace ToDoList_API.Controllers
@@ -14,95 +15,44 @@ namespace ToDoList_API.Controllers
     [ApiController]
     public class StatusController : ControllerBase
     {
-        private readonly todolistContext _context;
+        private ToDoList_BLL.StatusBLL _BLL;
 
-        public StatusController(todolistContext context)
+        public StatusController()
         {
-            _context = context;
+            _BLL = new ToDoList_BLL.StatusBLL();
         }
+
 
         // GET: api/Status
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Status>>> GetStatuses()
+        public async Task<ActionResult<List<StatusModel>>> GetStatuses()
         {
-            return await _context.Statuses.ToListAsync();
+            return _BLL.GetStatuses();
         }
+
 
         // GET: api/Status/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<Status>> GetStatus(int id)
+        public async Task<ActionResult<StatusModel>> GetStatus(int id)
         {
-            var status = await _context.Statuses.FindAsync(id);
+            var status = _BLL.GetStatus(id);
 
             if (status == null)
             {
                 return NotFound();
             }
 
-            return status;
+            return await status;
         }
 
-        // PUT: api/Status/5
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        [HttpPut("{id}")]
-        public async Task<IActionResult> PutStatus(int id, Status status)
-        {
-            if (id != status.StatusId)
-            {
-                return BadRequest();
-            }
-
-            _context.Entry(status).State = EntityState.Modified;
-
-            try
-            {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!StatusExists(id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
-            }
-
-            return NoContent();
-        }
-
-        // POST: api/Status
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        [HttpPost]
-        public async Task<ActionResult<Status>> PostStatus(Status status)
-        {
-            _context.Statuses.Add(status);
-            await _context.SaveChangesAsync();
-
-            return CreatedAtAction("GetStatus", new { id = status.StatusId }, status);
-        }
 
         // DELETE: api/Status/5
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteStatus(int id)
         {
-            var status = await _context.Statuses.FindAsync(id);
-            if (status == null)
-            {
-                return NotFound();
-            }
-
-            _context.Statuses.Remove(status);
-            await _context.SaveChangesAsync();
-
-            return NoContent();
+            await _BLL.DeleteStatus(id);
+            return Ok();
         }
 
-        private bool StatusExists(int id)
-        {
-            return _context.Statuses.Any(e => e.StatusId == id);
-        }
     }
 }
