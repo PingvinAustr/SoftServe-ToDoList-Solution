@@ -3,10 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using ToDoList_DAL.Interfaces;
 
 namespace ToDoList_DAL
 {
-    public class CategoryDAL
+    public class CategoryDAL : ICategoryRepository
     {
         public List<Category> GetCategories()
         {

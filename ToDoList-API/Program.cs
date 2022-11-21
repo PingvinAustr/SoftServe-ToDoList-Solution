@@ -1,7 +1,10 @@
 using ToDoList_API;
-
 using System.Web.Http;
 using Microsoft.EntityFrameworkCore;
+using ToDoList_DAL.Interfaces;
+using ToDoList_DAL;
+using ToDoList_BLL.Interfaces;
+using ToDoList_BLL;
 
 var MyAllowSpecificOrigins = "_myAllowSpecificOrigins";
 var builder = WebApplication.CreateBuilder(args);
@@ -23,6 +26,23 @@ builder.Services.AddCors(options =>
 });
 
 
+builder.Services.AddScoped<ICategoryRepository, CategoryDAL>();
+builder.Services.AddScoped<ITaskRepository, TaskDAL>();
+builder.Services.AddScoped<IStatusRepository, StatusDAL>();
+builder.Services.AddScoped<IUrgencyRepository, UrgencyDAL>();
+builder.Services.AddScoped<ITask, TaskBLL>();
+builder.Services.AddScoped<ICategory, CategoryBLL>();
+builder.Services.AddScoped<IStatus, StatusBLL>();
+builder.Services.AddScoped<IUrgency, UrgencyBLL>();
+
+var config = new AutoMapper.MapperConfiguration(cfg =>
+{
+    cfg.AddProfile(new ToDoList_BLL.Mapper.MappingProfile());
+});
+
+
+var mapper = config.CreateMapper();
+builder.Services.AddSingleton(mapper);
 builder.Services.AddControllers();
 builder.Services.AddControllersWithViews().AddNewtonsoftJson(options => options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore);
  

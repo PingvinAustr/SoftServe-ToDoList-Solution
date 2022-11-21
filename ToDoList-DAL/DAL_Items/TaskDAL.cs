@@ -3,10 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using ToDoList_DAL.Interfaces;
 
 namespace ToDoList_DAL
 {
-    public class TaskDAL
+    public class TaskDAL : ITaskRepository
     {
         public List<Task_> GetTasks()
         {
@@ -14,7 +15,7 @@ namespace ToDoList_DAL
             return _context.Tasks.ToList();
         }
 
-        public IEnumerable<Task_> GetTasksPerCategory(int category_id)
+        public List<Task_> GetTasksPerCategory(int category_id)
         {
             var _context = new ToDoList_DAL.todolistContext();
             List<Task_> tasks = new List<Task_>();
@@ -54,7 +55,7 @@ namespace ToDoList_DAL
 
             _context.Tasks.Add(task_);
             await _context.SaveChangesAsync();
-            return task_;
+             return task_;
         }
 
         public async Task<IAsyncResult> DeleteTask_(int id)

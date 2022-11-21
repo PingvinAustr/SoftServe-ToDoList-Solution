@@ -2,10 +2,12 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using AutoMapper;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using ToDoList_API;
+using ToDoList_BLL.Interfaces;
 using ToDoList_BLL.Models;
 using ToDoList_DAL;
 
@@ -16,10 +18,13 @@ namespace ToDoList_API.Controllers
     public class StatusController : ControllerBase
     {
         private ToDoList_BLL.StatusBLL _BLL;
-
-        public StatusController()
+        private readonly IStatus _status;
+        private readonly IMapper _mapper;
+        public StatusController(IMapper mapper, IStatus status)
         {
-            _BLL = new ToDoList_BLL.StatusBLL();
+            _mapper = mapper;
+            _status = status;
+            _BLL = new ToDoList_BLL.StatusBLL(mapper);
         }
 
 
@@ -27,7 +32,8 @@ namespace ToDoList_API.Controllers
         [HttpGet]
         public async Task<ActionResult<List<StatusModel>>> GetStatuses()
         {
-            return _BLL.GetStatuses();
+            //return _BLL.GetStatuses();
+            return _status.GetStatuses();
         }
 
 
@@ -35,7 +41,8 @@ namespace ToDoList_API.Controllers
         [HttpGet("{id}")]
         public async Task<ActionResult<StatusModel>> GetStatus(int id)
         {
-            var status = _BLL.GetStatus(id);
+            //var status = _BLL.GetStatus(id);
+            var status = _status.GetStatus(id);
 
             if (status == null)
             {
@@ -50,7 +57,8 @@ namespace ToDoList_API.Controllers
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteStatus(int id)
         {
-            await _BLL.DeleteStatus(id);
+            //await _BLL.DeleteStatus(id);
+            await _status.DeleteStatus(id);
             return Ok();
         }
 

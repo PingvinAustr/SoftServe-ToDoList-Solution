@@ -1,0 +1,17 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace ToDoList_DAL.Interfaces
+{
+    public interface IUrgencyRepository
+    {
+        public List<Urgency> GetUrgencies();
+
+        public  Task<Urgency> GetUrgency(int id);
+
+        public  Task<IAsyncResult> DeleteUrgency(int id);
+    }
+}

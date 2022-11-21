@@ -6,19 +6,19 @@ using System.Threading.Tasks;
 using AutoMapper;
 using ToDoList_DAL;
 using ToDoList_BLL.Models;
+using ToDoList_BLL.Interfaces;
 
 namespace ToDoList_BLL
 {
-    public class StatusBLL
+    public class StatusBLL : IStatus
     {
         private ToDoList_DAL.StatusDAL _DAL;
-        private Mapper _StatusMapper;
+        private readonly IMapper _StatusMapper;
 
-        public StatusBLL()
+        public StatusBLL(IMapper mapper)
         {
             _DAL = new ToDoList_DAL.StatusDAL();
-            var configStatus = new MapperConfiguration(cfg => cfg.CreateMap<Status, StatusModel>().ReverseMap());
-            _StatusMapper = new Mapper(configStatus);
+            _StatusMapper = mapper;
         }
 
         public List<StatusModel> GetStatuses()

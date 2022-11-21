@@ -4,20 +4,20 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using AutoMapper;
+using ToDoList_BLL.Interfaces;
 using ToDoList_BLL.Models;
 using ToDoList_DAL;
 
 namespace ToDoList_BLL
 {
-    public class UrgencyBLL
+    public class UrgencyBLL : IUrgency
     {
         private ToDoList_DAL.UrgencyDAL _DAL;
-        private Mapper _UrgencyMapper;
-        public UrgencyBLL()
+        private readonly IMapper _UrgencyMapper;
+        public UrgencyBLL(IMapper mapper)
         {
             _DAL = new ToDoList_DAL.UrgencyDAL();
-            var configUrgency = new MapperConfiguration(cfg => cfg.CreateMap<Urgency, UrgencyModel>().ReverseMap());
-            _UrgencyMapper = new Mapper(configUrgency);
+            _UrgencyMapper = mapper;
         }
 
         public List<UrgencyModel> GetUrgencies()

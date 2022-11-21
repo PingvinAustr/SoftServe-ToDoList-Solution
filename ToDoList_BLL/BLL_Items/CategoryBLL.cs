@@ -6,18 +6,18 @@ using System.Threading.Tasks;
 using ToDoList_DAL;
 using AutoMapper;
 using ToDoList_BLL.Models;
+using ToDoList_BLL.Interfaces;
 
 namespace ToDoList_BLL
 {
-    public class CategoryBLL
+    public class CategoryBLL : ICategory
     {
         private ToDoList_DAL.CategoryDAL _DAL;
-        private Mapper _CategoryMapper;
-        public CategoryBLL()
+        private readonly IMapper _CategoryMapper;
+        public CategoryBLL(IMapper mapper)
         {
             _DAL=new ToDoList_DAL.CategoryDAL();
-            var configCategory = new MapperConfiguration(cfg => cfg.CreateMap<Category, CategoryModel>().ReverseMap());
-            _CategoryMapper = new Mapper(configCategory);
+            _CategoryMapper = mapper;
         }
         public List<CategoryModel> GetCategories()
         {

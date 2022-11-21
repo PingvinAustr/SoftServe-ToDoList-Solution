@@ -9,6 +9,8 @@ using ToDoList_API;
 using ToDoList_DAL;
 using ToDoList_BLL;
 using ToDoList_BLL.Models;
+using AutoMapper;
+using ToDoList_BLL.Interfaces;
 
 namespace ToDoList_API.Controllers
 {
@@ -18,17 +20,20 @@ namespace ToDoList_API.Controllers
     public class CategoriesController : ControllerBase
     {
         private ToDoList_BLL.CategoryBLL _BLL;
-
-        public CategoriesController()
+        private readonly IMapper _mapper;
+        private readonly ICategory _category;
+        public CategoriesController(IMapper mapper, ICategory category)
         {
-            _BLL = new ToDoList_BLL.CategoryBLL();
+            _category = category;
+            _mapper = mapper;
+            _BLL = new ToDoList_BLL.CategoryBLL(mapper);
         }
 
         // GET: api/Categories
         [HttpGet]
         public async Task<ActionResult<List<CategoryModel>>> GetCategories()
         {
-            return _BLL.GetCategories();
+            return _category.GetCategories();
         }
 
         
@@ -38,7 +43,7 @@ namespace ToDoList_API.Controllers
         [HttpGet("{id}")]
         public async Task<ActionResult<CategoryModel>> GetCategory(int id)
         {
-            var category = _BLL.GetCategory(id);
+            var category = _category.GetCategory(id);
             if (category == null)
             {
                 return NotFound();
@@ -51,14 +56,14 @@ namespace ToDoList_API.Controllers
         [HttpPut]
         public void PutCategory(int id, [FromForm]string categoryName)
         {
-            _BLL.PutCategory(id, categoryName);
+            _category.PutCategory(id, categoryName);
         }
 
         // POST: api/Categories
         [HttpPost]
         public void PostCategory([FromForm] string categoryName)
         {
-            _BLL.PostCategory(categoryName);
+            _category.PostCategory(categoryName);
         }
 
 
@@ -66,7 +71,7 @@ namespace ToDoList_API.Controllers
         [HttpDelete("{id}")]
         public void DeleteCategory(int id)
         {
-            _BLL.DeleteCategory(id);
+            _category.DeleteCategory(id);
         }
         
     }
